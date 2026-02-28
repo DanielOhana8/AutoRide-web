@@ -1,25 +1,32 @@
 package com.autoride.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "cars")
-@Data
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Car {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
+    @Column(nullable = false)
     private String model;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "x", column = @Column(nullable = false)),
+            @AttributeOverride(name = "y", column = @Column(nullable = false))
+    })
     private Location location;
 
-    private boolean available;
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean available = true;
 }

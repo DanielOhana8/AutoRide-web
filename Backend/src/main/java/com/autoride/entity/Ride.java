@@ -1,35 +1,40 @@
 package com.autoride.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "rides")
-@Data
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Ride {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    private int userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    private int carId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_id", nullable = false)
+    private Car car;
 
+    @Column(nullable = false)
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "x", column = @Column(name = "start_x")),
-            @AttributeOverride(name = "y", column = @Column(name = "start_y"))
+            @AttributeOverride(name = "x", column = @Column(name = "start_x", nullable = false)),
+            @AttributeOverride(name = "y", column = @Column(name = "start_y", nullable = false))
     })
     private Location startLocation;
 
@@ -40,5 +45,5 @@ public class Ride {
     })
     private Location endLocation;
 
-    private double totalCost;
+    private Double totalCost;
 }
