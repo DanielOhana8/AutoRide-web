@@ -29,4 +29,8 @@ public class Car {
     @Column(nullable = false)
     @Builder.Default
     private Boolean available = true;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Double pricePerKm = 1.0;
 }
