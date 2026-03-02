@@ -19,7 +19,7 @@ public class CarService {
 
     @Transactional(readOnly = true)
     public Car findClosestAvailableCar(Location userLocation) {
-        return carRepository.findByAvailableTrue().stream()
+        return carRepository.findByIsAvailableTrue().stream()
                 .min(Comparator.comparingDouble(car -> userLocation.distanceTo(car.getLocation())))
                 .orElseThrow(() -> new EntityNotFoundException("No available cars found"));
     }
@@ -30,22 +30,22 @@ public class CarService {
     }
 
     @Transactional
-    public void setCarAvailability(Long id, Boolean available) {
+    public Car updateCarAvailable(Long id, Boolean isAvailable) {
         Car car = getCarById(id);
-        car.setAvailable(available);
-        carRepository.save(car);
+        car.setIsAvailable(isAvailable);
+        return carRepository.save(car);
     }
 
     @Transactional
-    public void setCarLocation(Long id, Location location) {
+    public Car updateCarLocation(Long id, Location location) {
         Car car = getCarById(id);
         car.setLocation(location);
-        carRepository.save(car);
+        return carRepository.save(car);
     }
 
     @Transactional(readOnly = true)
     public List<Car> getAllAvailableCars() {
-        return carRepository.findByAvailableTrue();
+        return carRepository.findByIsAvailableTrue();
     }
 
     @Transactional

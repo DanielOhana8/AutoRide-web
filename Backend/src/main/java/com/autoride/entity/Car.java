@@ -28,7 +28,7 @@ public class Car {
 
     @Column(nullable = false)
     @Builder.Default
-    private Boolean available = true;
+    private Boolean isAvailable = true;
 
     @Column(nullable = false)
     @Builder.Default

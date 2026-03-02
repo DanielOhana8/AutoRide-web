@@ -18,9 +18,8 @@ public class UserService {
 
     @Transactional
     public User register(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmail(user.getEmail()))
             throw new IllegalArgumentException("Email is already registered");
-        }
 
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
@@ -29,33 +28,27 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User login(String email, String password) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-
-        if (!(passwordEncoder.matches(password, user.getPassword()))) {
-            throw new IllegalArgumentException("Invalid email or password");
-        }
-
-        return user;
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("User not exists"));
     }
 
     @Transactional(readOnly = true)
     public User getUserById(Long id) {
-       return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not exists"));
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not exists"));
     }
 
     @Transactional
-    public void setBalance(Long id, double amount) {
+    public User updateUserBalance(Long id, double amount) {
         User user = getUserById(id);
         user.setBalance(user.getBalance() + amount);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Transactional
-    public void setUserLocation(Long id, Location location) {
+    public User updateUserLocation(Long id, Location location) {
         User user = getUserById(id);
         user.setLocation(location);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Transactional

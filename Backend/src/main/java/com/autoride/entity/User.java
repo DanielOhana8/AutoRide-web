@@ -27,8 +27,8 @@ public class User {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "x", column = @Column(nullable = false)),
-            @AttributeOverride(name = "y", column = @Column(nullable = false))
+            @AttributeOverride(name = "x", column = @Column()),
+            @AttributeOverride(name = "y", column = @Column())
     })
     private Location location;
 

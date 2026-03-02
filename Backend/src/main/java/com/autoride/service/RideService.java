@@ -23,27 +23,30 @@ public class RideService {
 
     @Transactional
     public Ride startRide(Long userId) {
-        if (rideRepository.findByUser_IdAndEndTimeIsNull(userId).isPresent()) {
+        if (rideRepository.findByUser_IdAndEndTimeIsNull(userId).isPresent())
             throw new IllegalStateException("User already in an active ride");
-        }
 
         User user = userService.getUserById(userId);
 
-        if (user.getBalance() <= 0) {
-            throw new IllegalStateException("Negative balance");
-        }
+        if (user.getLocation() == null)
+            throw new IllegalStateException("User location is unknown");
+
+
+        if (user.getBalance() <= 0)
+            throw new IllegalStateException("Non-positive balance");
 
         Car car = carService.findClosestAvailableCar(user.getLocation());
-        Ride ride = Ride.builder().user(user).car(car).startTime(LocalDateTime.now()).startLocation(user.getLocation()).build();
+        Ride ride = Ride.builder().user(user).car(car).startTime(LocalDateTime.now())
+                .startLocation(user.getLocation()).build();
 
-        car.setAvailable(false);
+        car.setIsAvailable(false);
         carService.saveCar(car);
 
         return rideRepository.save(ride);
     }
 
     @Transactional
-    public void endRide(Long userId, Location endLocation) {
+    public Ride endRide(Long userId, Location endLocation) {
         Ride ride = getUserActiveRide(userId);
         Car car = ride.getCar();
         User user = ride.getUser();
@@ -54,24 +57,42 @@ public class RideService {
         user.setLocation(endLocation);
         userService.saveUser(user);
 
-        car.setAvailable(true);
+        car.setIsAvailable(true);
         car.setLocation(endLocation);
         carService.saveCar(car);
 
         ride.setEndTime(LocalDateTime.now());
         ride.setEndLocation(endLocation);
         ride.setTotalCost(totalCost);
-        rideRepository.save(ride);
+
+        return rideRepository.save(ride);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Ride> getRidesHistory() {
+        return rideRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Ride> getAllActiveRides() {
+        return rideRepository.findByEndTimeIsNull();
     }
 
     @Transactional(readOnly = true)
     public Ride getUserActiveRide(Long userId) {
-        return rideRepository.findByUser_IdAndEndTimeIsNull(userId).orElseThrow(() -> new EntityNotFoundException("Not in active ride"));
+        return rideRepository.findByUser_IdAndEndTimeIsNull(userId).orElseThrow(() ->
+                new EntityNotFoundException("Not in active ride"));
     }
 
     @Transactional(readOnly = true)
     public List<Ride> getUserRideHistory(Long userId) {
         return rideRepository.findByUser_Id(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public Ride getCarActiveRide(Long carId) {
+        return rideRepository.findByCar_IdAndEndTimeIsNull(carId).orElseThrow(() ->
+                new EntityNotFoundException("Not in active ride"));
     }
 
     @Transactional(readOnly = true)
