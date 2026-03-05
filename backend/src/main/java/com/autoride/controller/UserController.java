@@ -26,29 +26,6 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
-
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequest.email(), loginRequest.password()));
-
-        User user = userService.getUserByEmail(loginRequest.email());
-        String token = jwtService.generateToken(user.getEmail());
-
-        return ResponseEntity.ok(new AuthResponse(token, mapToUserResponse(user)));
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        User user = User.builder().name(registerRequest.name()).email(registerRequest.email())
-                .password(registerRequest.password()).build();
-        user = userService.register(user);
-        String token = jwtService.generateToken(user.getEmail());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(new AuthResponse(token, mapToUserResponse(user)));
-    }
 
     @PatchMapping("/balance")
     public ResponseEntity<UserResponse> updateBalance(Principal principal,
