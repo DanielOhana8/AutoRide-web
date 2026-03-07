@@ -15,3 +15,8 @@ export const updateCarLocation = (carId: number, data: UpdateLocationRequest) =>
     const url = `/cars/${carId}/location`;
     return callHttp(url, 'PATCH', data);
 }
+
+export const getCarById = (carId: number) => {
+    const url = `/cars/${carId}`;
+    return callHttp(url, 'GET');
+}

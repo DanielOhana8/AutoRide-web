@@ -54,7 +54,7 @@ export default function Login() {
                     />
                 </div>
                 <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'loading' : 'login'}
+                    {isLoading ? 'login...' : 'login'}
                 </button>
             </form>
             <p>
