@@ -51,6 +51,12 @@ public class CarController {
         return ResponseEntity.ok(carResponse);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CarResponse> getCarById(@PathVariable Long id) {
+        Car car = carService.getCarById(id);
+        return ResponseEntity.ok(mapToCarResponse(car));
+    }
+
     private CarResponse mapToCarResponse(Car car) {
         return new CarResponse(car.getId(), car.getModel(), car.getLocation().getX(),
                 car.getLocation().getY(), car.getIsAvailable());
