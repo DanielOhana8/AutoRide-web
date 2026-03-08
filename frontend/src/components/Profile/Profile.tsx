@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext.tsx';
 import Balance from './Balance/Balance.tsx';
-import RideHistory from '../Ride/RideHistory/RideHistory.tsx';
+import RideHistory from "./RideHistory/RideHistory.tsx";
 
 export default function Profile() {
     const { user } = useAuth();

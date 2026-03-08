@@ -32,8 +32,8 @@ export default function Dashboard() {
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 try {
-                    const x = Math.round(position.coords.latitude * 10000);
-                    const y = Math.round(position.coords.longitude * 10000);
+                    const x = Math.round(position.coords.latitude * 111);
+                    const y = Math.round(position.coords.longitude * 111);
 
                     await updateLocation({ x, y });
                     const ride = await startRide();
@@ -58,8 +58,8 @@ export default function Dashboard() {
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 try {
-                    const x = Math.round(position.coords.latitude * 10000);
-                    const y = Math.round(position.coords.longitude * 10000);
+                    const x = Math.round(position.coords.latitude * 111);
+                    const y = Math.round(position.coords.longitude * 111);
 
                     await endRide({ x, y });
                     setActiveRide(null);

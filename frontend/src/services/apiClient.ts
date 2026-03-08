@@ -23,6 +23,13 @@ export const callHttp = async (restUrl: string, method: string, body?: any) => {
 
     const response = await fetch(url, options);
 
+    if (response.status === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+        return;
+    }
+
     if (!response.ok) {
         const errorData = await response.text();
         throw new Error(errorData || `Network error: ${response.status}`);

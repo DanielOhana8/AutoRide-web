@@ -23,7 +23,7 @@ export interface Ride {
     endLocationY: number | null;
     startTime: string;
     endTime: string | null;
-    price: number;
+    price: number | null;
 }
 
 export interface Auth {
