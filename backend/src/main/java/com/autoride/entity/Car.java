@@ -34,5 +34,5 @@ public class Car {
 
     @Column(precision = 10, scale = 2, nullable = false)
     @Builder.Default
-    private BigDecimal pricePerKm = BigDecimal.ONE;
+    private BigDecimal pricePerMin = BigDecimal.ONE;
 }

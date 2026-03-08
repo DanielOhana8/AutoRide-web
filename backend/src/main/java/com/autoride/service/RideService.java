@@ -51,9 +51,10 @@ public class RideService {
         Ride ride = getUserActiveRide(userId);
         Car car = ride.getCar();
         User user = ride.getUser();
+        LocalDateTime now = LocalDateTime.now();
 
-        BigDecimal totalCost = car.getPricePerKm().multiply(BigDecimal.valueOf(
-                ride.getStartLocation().distanceTo(endLocation)));
+        long minutes = java.time.Duration.between(ride.getStartTime(), now).toMinutes();
+        BigDecimal totalCost = car.getPricePerMin().multiply(BigDecimal.valueOf(Math.max(1, minutes)));
 
         user.setBalance(user.getBalance().subtract(totalCost));
         user.setLocation(endLocation);
@@ -63,7 +64,7 @@ public class RideService {
         car.setLocation(endLocation);
         carService.saveCar(car);
 
-        ride.setEndTime(LocalDateTime.now());
+        ride.setEndTime(now);
         ride.setEndLocation(endLocation);
         ride.setTotalCost(totalCost);
 
