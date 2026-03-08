@@ -210,3 +210,16 @@ a:hover {
     margin-top: 10px;
     font-weight: 500;
 }
+
+.manual-fallback {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 25px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.manual-fallback-button {
+    margin-top: 10px;
+}

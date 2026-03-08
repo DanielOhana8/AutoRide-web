@@ -3,10 +3,8 @@ package com.autoride.controller;
 import com.autoride.dto.request.UpdateIsAvailableRequest;
 import com.autoride.dto.request.UpdateLocationRequest;
 import com.autoride.dto.response.CarResponse;
-import com.autoride.dto.response.UserResponse;
 import com.autoride.entity.Car;
 import com.autoride.entity.Location;
-import com.autoride.entity.User;
 import com.autoride.service.CarService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +19,9 @@ public class CarController {
     private final CarService carService;
 
     @GetMapping("/closest")
-    public ResponseEntity<CarResponse> findClosestAvailableCar(@RequestParam Integer x, @RequestParam Integer y) {
-        Location location = Location.builder().x(x).y(y).build();
+    public ResponseEntity<CarResponse> findClosestAvailableCar(
+            @RequestParam Double latitude, @RequestParam Double longitude) {
+        Location location = Location.builder().latitude(latitude).longitude(longitude).build();
         Car car = carService.findClosestAvailableCar(location);
 
         CarResponse carResponse = mapToCarResponse(car);
@@ -43,7 +42,8 @@ public class CarController {
     @PatchMapping("/{id}/location")
     public ResponseEntity<CarResponse> updateCarLocation(@PathVariable Long id,
             @Valid @RequestBody UpdateLocationRequest updateLocationRequest) {
-        Location location = Location.builder().x(updateLocationRequest.x()).y(updateLocationRequest.y()).build();
+        Location location = Location.builder().latitude(updateLocationRequest.latitude())
+                .longitude(updateLocationRequest.longitude()).build();
         Car car = carService.updateCarLocation(id , location);
 
         CarResponse carResponse = mapToCarResponse(car);
@@ -58,7 +58,7 @@ public class CarController {
     }
 
     private CarResponse mapToCarResponse(Car car) {
-        return new CarResponse(car.getId(), car.getModel(), car.getLocation().getX(),
-                car.getLocation().getY(), car.getIsAvailable());
+        return new CarResponse(car.getId(), car.getModel(), car.getLocation().getLatitude(),
+                car.getLocation().getLongitude(), car.getIsAvailable());
     }
 }

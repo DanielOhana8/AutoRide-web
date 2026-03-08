@@ -56,11 +56,11 @@ export default function RideHistory() {
                             {new Date(ride.startTime).toLocaleString()}
                         </td>
                         <td>
-                            {(ride.startLocationX / 111).toFixed(4)}, {(ride.startLocationY / 111).toFixed(4)}
+                            {(ride.startLatitude / 111).toFixed(4)}, {(ride.startLongitude / 111).toFixed(4)}
                         </td>
                         <td>
-                            {ride.endLocationX && ride.endLocationY
-                                ? `${(ride.endLocationX / 111).toFixed(4)}, ${(ride.endLocationY / 111).toFixed(4)}`
+                            {ride.endLatitude && ride.endLongitude
+                                ? `${(ride.endLatitude / 111).toFixed(4)}, ${(ride.endLongitude / 111).toFixed(4)}`
                                 : 'Ongoing'}
                         </td>
                         <td>

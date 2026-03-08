@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class RideService {
             throw new IllegalStateException("User location is unknown");
 
 
-        if (user.getBalance() <= 0)
+        if (user.getBalance().compareTo(BigDecimal.ZERO) <= 0)
             throw new IllegalStateException("Non-positive balance");
 
         Car car = carService.findClosestAvailableCar(user.getLocation());
@@ -51,9 +52,10 @@ public class RideService {
         Car car = ride.getCar();
         User user = ride.getUser();
 
-        double totalCost = car.getPricePerKm() * ride.getStartLocation().distanceTo(endLocation);
+        BigDecimal totalCost = car.getPricePerKm().multiply(BigDecimal.valueOf(
+                ride.getStartLocation().distanceTo(endLocation)));
 
-        user.setBalance(user.getBalance() -totalCost);
+        user.setBalance(user.getBalance().subtract(totalCost));
         user.setLocation(endLocation);
         userService.saveUser(user);
 

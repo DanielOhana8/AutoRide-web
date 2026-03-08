@@ -12,11 +12,23 @@ import lombok.*;
 @AllArgsConstructor
 public class Location {
 
-    private Integer x;
+    private Double latitude;
+    private Double longitude;
 
-    private Integer y;
+    private static final int EARTH_RADIUS_KM = 6371;
 
     public double distanceTo(Location other) {
-        return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+        double lat1Rad = Math.toRadians(latitude);
+        double lat2Rad = Math.toRadians(other.latitude);
+        double lon1Rad = Math.toRadians(longitude);
+        double lon2Rad = Math.toRadians(other.longitude);
+
+        double dLat = lat2Rad - lat1Rad;
+        double dLon = lon2Rad - lon1Rad;
+
+        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.pow(Math.sin(dLon / 2), 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return EARTH_RADIUS_KM * c;
     }
 }

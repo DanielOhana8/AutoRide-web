@@ -3,13 +3,15 @@ package com.autoride.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "cars")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class Car {
 
     @Id
@@ -21,8 +23,8 @@ public class Car {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "x", column = @Column(nullable = false)),
-            @AttributeOverride(name = "y", column = @Column(nullable = false))
+            @AttributeOverride(name = "latitude", column = @Column(nullable = false)),
+            @AttributeOverride(name = "longitude", column = @Column(nullable = false))
     })
     private Location location;
 
@@ -30,7 +32,7 @@ public class Car {
     @Builder.Default
     private Boolean isAvailable = true;
 
-    @Column(nullable = false)
+    @Column(precision = 10, scale = 2, nullable = false)
     @Builder.Default
-    private Double pricePerKm = 1.0;
+    private BigDecimal pricePerKm = BigDecimal.ONE;
 }

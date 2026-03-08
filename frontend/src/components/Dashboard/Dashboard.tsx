@@ -9,6 +9,11 @@ export default function Dashboard() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const [showManualFallback, setShowManualFallback] = useState(false);
+    const [manualLat, setManualLat] = useState<string>("");
+    const [manualLon, setManualLon] = useState<string>("");
+    const [fallbackAction, setFallbackAction] = useState<'start' | 'end' | null>(null);
+
     useEffect(() => {
         const fetchActiveRide = async () => {
             try {
@@ -21,62 +26,77 @@ export default function Dashboard() {
         fetchActiveRide();
     }, []);
 
-    const handleStartRide = () => {
+    const processRideAction = async (action: 'start' | 'end', latitude: number, longitude: number) => {
         setIsLoading(true);
         setError(null);
 
-        if (!navigator.geolocation) {
-            setError('Geolocation is not supported by your browser.');
+        try {
+            if (action === 'start') {
+                await updateLocation({ latitude, longitude });
+                const ride = await startRide();
+                setActiveRide(ride);
+            } else {
+                await endRide({ latitude, longitude });
+                setActiveRide(null);
+            }
+            setShowManualFallback(false);
+            setFallbackAction(null);
+        } catch (err: any) {
+            setError(err.message || `Failed to ${action} ride.`);
+        } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleMainAction = (action: 'start' | 'end') => {
+        setError(null);
+        setShowManualFallback(false);
+        setFallbackAction(null);
+
+        if (!navigator.geolocation) {
+            setError('Geolocation is not supported by your browser. Please use manual input.');
+            setFallbackAction(action);
+            setShowManualFallback(true);
             return;
         }
 
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                try {
-                    const x = Math.round(position.coords.latitude * 111);
-                    const y = Math.round(position.coords.longitude * 111);
-
-                    await updateLocation({ x, y });
-                    const ride = await startRide();
-                    setActiveRide(ride);
-                } catch (err: any) {
-                    setError(err.message || 'Failed to start ride. Make sure your balance is positive.');
-                } finally {
-                    setIsLoading(false);
-                }
-            },
-            () => {
-                setError('Failed to get your location. Please allow location access.');
-                setIsLoading(false);
-            }
-        );
-    }
-
-    const handleEndRide = () => {
         setIsLoading(true);
-        setError(null);
-
         navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                try {
-                    const x = Math.round(position.coords.latitude * 111);
-                    const y = Math.round(position.coords.longitude * 111);
-
-                    await endRide({ x, y });
-                    setActiveRide(null);
-                } catch (err: any) {
-                    setError(err.message || 'Failed to end the ride.');
-                } finally {
-                    setIsLoading(false);
-                }
+            (position) => {
+                processRideAction(action, position.coords.latitude, position.coords.longitude);
             },
-            () => {
-                setError('Failed to get location to end ride.');
+            (geoError) => {
+                console.error("Geolocation failed:", geoError);
+                let msg = 'Could not get your location automatically. Please allow access or enter coordinates manually.';
+
+                if (geoError.code === geoError.PERMISSION_DENIED) {
+                    msg = 'Location access denied. Please enter coordinates manually to proceed.';
+                }
+
+                setError(msg);
+                setFallbackAction(action);
+                setShowManualFallback(true);
                 setIsLoading(false);
-            }
+            },
+            { timeout: 10000, enableHighAccuracy: true }
         );
-    }
+    };
+
+    const handleManualSubmit = () => {
+        if (!fallbackAction) {
+            return;
+        }
+
+        const lat = parseFloat(manualLat);
+        const lon = parseFloat(manualLon);
+
+        if (isNaN(lat) || isNaN(lon)) {
+            setError('Please enter valid numerical coordinates.');
+            return;
+        }
+
+        processRideAction(fallbackAction, lat, lon);
+    };
 
     return (
         <div>
@@ -85,16 +105,42 @@ export default function Dashboard() {
             {!activeRide ? (
                 <div>
                     <h2>Ready for a ride?</h2>
-                    <button onClick={handleStartRide} disabled={isLoading}>
-                        {isLoading ? 'Starting...' : 'Start Ride'}
+                    <button onClick={() => handleMainAction('start')} disabled={isLoading}>
+                        {isLoading ? 'Locating...' : 'Start Ride'}
                     </button>
                 </div>
             ) : (
                 <ActiveRide
                     ride={activeRide}
-                    onEndRide={handleEndRide}
+                    onEndRide={() => handleMainAction('end')}
                     isLoading={isLoading}
                 />
+            )}
+            {showManualFallback && (
+                <div className="manual-fallback">
+                    <h3>Enter Location Manually</h3>
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Latitude"
+                            value={manualLat}
+                            onChange={(e) => setManualLat(e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Longitude"
+                            value={manualLon}
+                            onChange={(e) => setManualLon(e.target.value)}
+                        />
+                    </div>
+                    <button
+                        className="manual-fallback-button"
+                        onClick={handleManualSubmit}
+                        disabled={isLoading || !manualLat || !manualLon}
+                    >
+                        {isLoading ? 'Processing...' : 'Confirm Manual Entry'}
+                    </button>
+                </div>
             )}
         </div>
     )

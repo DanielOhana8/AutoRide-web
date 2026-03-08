@@ -40,7 +40,8 @@ public class UserController {
     public ResponseEntity<UserResponse> updateLocation(Principal principal,
             @Valid @RequestBody UpdateLocationRequest updateLocationRequest) {
         User user = userService.getUserByEmail(principal.getName());
-        Location location = Location.builder().x(updateLocationRequest.x()).y(updateLocationRequest.y()).build();
+        Location location = Location.builder().latitude(updateLocationRequest.latitude())
+                .longitude(updateLocationRequest.longitude()).build();
         user = userService.updateUserLocation(user.getId(), location);
 
         return ResponseEntity.ok(mapToUserResponse(user));

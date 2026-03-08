@@ -3,6 +3,7 @@ package com.autoride.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class Ride {
 
     @Id
@@ -33,17 +34,18 @@ public class Ride {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "x", column = @Column(name = "start_x", nullable = false)),
-            @AttributeOverride(name = "y", column = @Column(name = "start_y", nullable = false))
+            @AttributeOverride(name = "latitude", column = @Column(name = "start_latitude", nullable = false)),
+            @AttributeOverride(name = "longitude", column = @Column(name = "start_longitude", nullable = false))
     })
     private Location startLocation;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "x", column = @Column(name = "end_x")),
-            @AttributeOverride(name = "y", column = @Column(name = "end_y"))
+            @AttributeOverride(name = "latitude", column = @Column(name = "end_latitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "end_longitude"))
     })
     private Location endLocation;
 
-    private Double totalCost;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal totalCost;
 }

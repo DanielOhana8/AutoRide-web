@@ -8,8 +8,8 @@ export interface User {
 export interface Car {
     id: number;
     model: string;
-    x: number;
-    y:  number;
+    latitude: number;
+    longitude: number;
     isAvailable: boolean;
 }
 
@@ -17,10 +17,10 @@ export interface Ride {
     id: number;
     userId: number;
     carId: number;
-    startLocationX: number;
-    startLocationY: number;
-    endLocationX: number | null;
-    endLocationY: number | null;
+    startLatitude: number;
+    startLongitude: number;
+    endLatitude: number | null;
+    endLongitude: number | null;
     startTime: string;
     endTime: string | null;
     price: number | null;
@@ -32,8 +32,8 @@ export interface Auth {
 }
 
 export interface UpdateLocationRequest {
-    x: number;
-    y: number;
+    latitude: number;
+    longitude: number;
 }
 
 export interface UpdateIsAvailableRequest {
@@ -56,6 +56,6 @@ export interface LoginRequest {
 }
 
 export interface EndRideRequest {
-    x: number;
-    y: number;
+    latitude: number;
+    longitude: number;
 }

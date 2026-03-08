@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -38,9 +40,9 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUserBalance(Long id, double amount) {
+    public User updateUserBalance(Long id, BigDecimal amount) {
         User user = getUserById(id);
-        user.setBalance(user.getBalance() + amount);
+        user.setBalance(user.getBalance().add(amount));
         return userRepository.save(user);
     }
 

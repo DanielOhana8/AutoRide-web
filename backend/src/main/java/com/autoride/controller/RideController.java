@@ -35,7 +35,8 @@ public class RideController {
     @PatchMapping("/end")
     public ResponseEntity<RideResponse> endRide(Principal principal, @Valid @RequestBody EndRideRequest endRideRequest) {
         User user = userService.getUserByEmail(principal.getName());
-        Location endLocation = Location.builder().x(endRideRequest.x()).y(endRideRequest.y()).build();
+        Location endLocation = Location.builder().latitude(endRideRequest.latitude())
+                .longitude(endRideRequest.longitude()).build();
         Ride ride = rideService.endRide(user.getId(), endLocation);
 
         return ResponseEntity.ok(mapToRideResponse(ride));
@@ -95,9 +96,9 @@ public class RideController {
 
     private RideResponse mapToRideResponse(Ride ride) {
         return new RideResponse(ride.getId(), ride.getUser().getId(), ride.getCar().getId(),
-                ride.getStartLocation().getX(), ride.getStartLocation().getY(),
-                ride.getEndLocation() == null ? null : ride.getEndLocation().getX(),
-                ride.getEndLocation() == null ? null : ride.getEndLocation().getY(),
+                ride.getStartLocation().getLatitude(), ride.getStartLocation().getLongitude(),
+                ride.getEndLocation() == null ? null : ride.getEndLocation().getLatitude(),
+                ride.getEndLocation() == null ? null : ride.getEndLocation().getLongitude(),
                 ride.getStartTime(), ride.getEndTime(), ride.getTotalCost());
     }
 }
