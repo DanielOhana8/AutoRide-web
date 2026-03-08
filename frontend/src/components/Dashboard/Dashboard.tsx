@@ -14,7 +14,9 @@ export default function Dashboard() {
             try {
                 const ride = await getUserActiveRide();
                 setActiveRide(ride);
-            } catch (err) {}
+            } catch (err) {
+                console.error("No active ride found or server error:", err);
+            }
         };
         fetchActiveRide();
     }, []);
@@ -79,7 +81,7 @@ export default function Dashboard() {
     return (
         <div>
             <h1>Dashboard</h1>
-            {error && <div style={{ color: 'red' }}>{error}</div>}
+            {error && <div className="error-message">{error}</div>}
             {!activeRide ? (
                 <div>
                     <h2>Ready for a ride?</h2>

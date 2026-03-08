@@ -29,12 +29,12 @@ export default function Login() {
     };
 
     return (
-        <div>
-            <h1>Login</h1>
-            {error && <div style={{ color: 'red' }}>{error}</div>}
+        <div className="auth-container card">
+            <h2 className="auth-title">Login</h2>
+            {error && <div className="error-message">{error}</div>}
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email">Email: </label>
+                <div className="form-group">
+                    <label htmlFor="email">Email:</label>
                     <input
                         type="email"
                         id="email"
@@ -43,8 +43,8 @@ export default function Login() {
                         required
                     />
                 </div>
-                <div>
-                    <label htmlFor="password">Password: </label>
+                <div className="form-group">
+                    <label htmlFor="password">Password:</label>
                     <input
                         type="password"
                         id="password"
@@ -53,12 +53,12 @@ export default function Login() {
                         required
                     />
                 </div>
-                <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'login...' : 'login'}
+                <button type="submit" className="auth-btn" disabled={isLoading}>
+                    {isLoading ? 'Logging in...' : 'Login'}
                 </button>
             </form>
-            <p>
-                You don't have an account? <Link to="/register">register here</Link>
+            <p className="auth-footer">
+                Don't have an account? <Link to="/register">Register here</Link>
             </p>
         </div>
     )

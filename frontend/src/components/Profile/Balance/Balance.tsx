@@ -45,7 +45,7 @@ export default function Balance() {
                 </button>
             </div>
             {message && (
-                <p style={{ color: message.type === 'success' ? 'green' : 'red'}}>
+                <p className={`status-message ${message.type === 'success' ? 'text-success' : 'text-error'}`}>
                     {message.text}
                 </p>
             )}

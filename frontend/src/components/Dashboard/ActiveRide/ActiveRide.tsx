@@ -34,7 +34,7 @@ export default function ActiveRide({ ride, onEndRide, isLoading }: ActiveRidePro
             <div>
                 <p><strong>Ride ID: </strong>{ride.id}</p>
                 <p><strong>Car Model: </strong>
-                    {carError ? <span style={{ color: 'red' }}>{carError}</span> : car ? car.model : 'Loading...'}
+                    {carError ? <span className="text-error">{carError}</span> : car ? car.model : 'Loading...'}
                 </p>
                 <p><strong>Start Time: </strong>{new Date(ride.startTime).toLocaleString()}</p>
             </div>

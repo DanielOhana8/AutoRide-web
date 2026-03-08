@@ -30,12 +30,12 @@ export default function Register() {
     };
 
     return (
-        <div>
-            <h1>Register</h1>
-            {error && <div style={{ color: 'red' }}>{error}</div>}
+        <div className="auth-container card">
+            <h2 className="auth-title">Create Account</h2>
+            {error && <div className="error-message">{error}</div>}
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="name">Name: </label>
+                <div className="form-group">
+                    <label htmlFor="name">Name:</label>
                     <input
                         type="text"
                         id="name"
@@ -44,8 +44,8 @@ export default function Register() {
                         required
                     />
                 </div>
-                <div>
-                    <label htmlFor="email">Email: </label>
+                <div className="form-group">
+                    <label htmlFor="email">Email:</label>
                     <input
                         type="email"
                         id="email"
@@ -54,8 +54,8 @@ export default function Register() {
                         required
                     />
                 </div>
-                <div>
-                    <label htmlFor="password">Password: </label>
+                <div className="form-group">
+                    <label htmlFor="password">Password:</label>
                     <input
                         type="password"
                         id="password"
@@ -64,12 +64,12 @@ export default function Register() {
                         required
                     />
                 </div>
-                <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'register...' : 'register'}
+                <button type="submit" className="auth-btn" disabled={isLoading}>
+                    {isLoading ? 'Registering...' : 'Register'}
                 </button>
             </form>
-            <p>
-                You already have an account? <Link to="/login">login here</Link>
+            <p className="auth-footer">
+                Already have an account? <Link to="/login">Login here</Link>
             </p>
         </div>
     )

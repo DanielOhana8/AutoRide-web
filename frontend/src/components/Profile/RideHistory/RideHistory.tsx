@@ -30,7 +30,7 @@ export default function RideHistory() {
     }
 
     if (error) {
-        return <p style={{ color: 'red' }}>{error}</p>;
+        return <p className="text-error">{error}</p>;
     }
 
     if (rides.length === 0) {

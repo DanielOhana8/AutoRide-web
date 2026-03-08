@@ -1,4 +1,3 @@
-import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "./components/Auth/Login/Login.tsx";
 import Register from "./components/Auth/Register/Register.tsx";
@@ -14,15 +13,17 @@ function AppRoutes() {
     return (
         <BrowserRouter>
             <Header />
-            <Routes>
-                <Route path="/login" element={token ? <Navigate to="/dashboard" replace /> : <Login />} />
-                <Route path="/register" element={token ? <Navigate to="/dashboard" replace /> : <Register />} />
-                <Route element={<PrivateRoute />}>
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/profile" element={<Profile />} />
-                </Route>
-                <Route path="*" element={<Navigate to={token ? "/dashboard" : "/login"} replace />} />
-            </Routes>
+            <main className="container">
+                <Routes>
+                    <Route path="/login" element={token ? <Navigate to="/dashboard" replace /> : <Login />} />
+                    <Route path="/register" element={token ? <Navigate to="/dashboard" replace /> : <Register />} />
+                    <Route element={<PrivateRoute />}>
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/profile" element={<Profile />} />
+                    </Route>
+                    <Route path="*" element={<Navigate to={token ? "/dashboard" : "/login"} replace />} />
+                </Routes>
+            </main>
         </BrowserRouter>
     );
 }
