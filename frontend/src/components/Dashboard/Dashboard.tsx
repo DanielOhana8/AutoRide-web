@@ -19,7 +19,7 @@ export default function Dashboard() {
         fetchActiveRide();
     }, []);
 
-    const handleStartRide = async () => {
+    const handleStartRide = () => {
         setIsLoading(true);
         setError(null);
 

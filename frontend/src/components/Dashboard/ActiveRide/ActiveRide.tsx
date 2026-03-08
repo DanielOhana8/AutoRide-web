@@ -32,11 +32,11 @@ export default function ActiveRide({ ride, onEndRide, isLoading }: ActiveRidePro
         <div>
             <h2>Active Ride</h2>
             <div>
-                <p><strong>Ride ID:</strong> {ride.id}</p>
-                <p><strong>Car Model:</strong>
+                <p><strong>Ride ID: </strong>{ride.id}</p>
+                <p><strong>Car Model: </strong>
                     {carError ? <span style={{ color: 'red' }}>{carError}</span> : car ? car.model : 'Loading...'}
                 </p>
-                <p><strong>Start Time:</strong> {new Date(ride.startTime).toLocaleString()}</p>
+                <p><strong>Start Time: </strong>{new Date(ride.startTime).toLocaleString()}</p>
             </div>
             <button onClick={onEndRide} disabled={isLoading}>
                 {isLoading ? 'Ending Ride...' : 'End Ride'}
