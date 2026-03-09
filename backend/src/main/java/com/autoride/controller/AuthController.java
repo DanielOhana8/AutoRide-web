@@ -2,11 +2,8 @@ package com.autoride.controller;
 
 import com.autoride.dto.request.LoginRequest;
 import com.autoride.dto.request.RegisterRequest;
-import com.autoride.dto.request.UpdateBalanceRequest;
-import com.autoride.dto.request.UpdateLocationRequest;
 import com.autoride.dto.response.AuthResponse;
 import com.autoride.dto.response.UserResponse;
-import com.autoride.entity.Location;
 import com.autoride.entity.User;
 import com.autoride.security.JwtService;
 import com.autoride.service.UserService;
@@ -17,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/auth")

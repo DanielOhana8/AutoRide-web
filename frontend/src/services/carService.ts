@@ -1,8 +1,8 @@
 import {callHttp} from "./apiClient.ts";
 import type {UpdateIsAvailableRequest, UpdateLocationRequest} from "../types";
 
-export const findClosestAvailableCar = (x: number, y: number) => {
-    const url = `/cars/closest?x=${x}&y=${y}`;
+export const findClosestAvailableCar = (latitude: number, longitude: number) => {
+    const url = `/cars/closest?latitude=${latitude}&longitude=${longitude}`;
     return callHttp(url, 'GET');
 }
 
