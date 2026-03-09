@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import type {Ride} from "../../types";
 import ActiveRide from "./ActiveRide/ActiveRide.tsx";
 import {endRide, getUserActiveRide, startRide} from "../../services/rideService.ts";
-import {updateLocation} from "../../services/userService.ts";
+import {getMyUser, updateLocation} from "../../services/userService.ts";
 
 export default function Dashboard() {
     const [activeRide, setActiveRide] = useState<Ride | null>(null);
@@ -41,6 +41,8 @@ export default function Dashboard() {
                 setActiveRide(ride);
             } else {
                 await endRide({ latitude, longitude });
+                const updatedUser = await getMyUser();
+                updatedUser(updatedUser);
                 setActiveRide(null);
             }
             setShowManualFallback(false);

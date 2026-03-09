@@ -20,6 +20,13 @@ public class UserController {
 
     private final UserService userService;
 
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getMyUser(Principal principal) {
+        User user = userService.getUserByEmail(principal.getName());
+
+        return ResponseEntity.ok(mapToUserResponse(user));
+    }
+
     @PatchMapping("/balance")
     public ResponseEntity<UserResponse> updateBalance(Principal principal,
             @Valid @RequestBody UpdateBalanceRequest updateBalanceRequest) {
