@@ -16,11 +16,15 @@ export default function Dashboard() {
 
     useEffect(() => {
         const fetchActiveRide = async () => {
+            setIsLoading(true);
+
             try {
                 const ride = await getUserActiveRide();
                 setActiveRide(ride);
             } catch (err) {
                 console.error("No active ride found or server error:", err);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchActiveRide();
