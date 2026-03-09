@@ -40,4 +40,11 @@ public class GlobalExceptionHandler {
                                                        .BadCredentialsException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
     }
+
+    @ExceptionHandler(org.springframework.orm.ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<String> handleOptimisticLocking(
+            org.springframework.orm.ObjectOptimisticLockingFailureException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body("The resource was updated by another request. Please try again.");
+    }
 }
