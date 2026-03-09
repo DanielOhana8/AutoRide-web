@@ -3,11 +3,13 @@ import type {Ride} from "../../types";
 import ActiveRide from "./ActiveRide/ActiveRide.tsx";
 import {endRide, getUserActiveRide, startRide} from "../../services/rideService.ts";
 import {getMyUser, updateLocation} from "../../services/userService.ts";
+import {useAuth} from "../../context/AuthContext.tsx";
 
 export default function Dashboard() {
     const [activeRide, setActiveRide] = useState<Ride | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { updateUser } = useAuth();
 
     const [showManualFallback, setShowManualFallback] = useState(false);
     const [manualLat, setManualLat] = useState<string>("");
@@ -42,7 +44,7 @@ export default function Dashboard() {
             } else {
                 await endRide({ latitude, longitude });
                 const updatedUser = await getMyUser();
-                updatedUser(updatedUser);
+                updateUser(updatedUser);
                 setActiveRide(null);
             }
             setShowManualFallback(false);
