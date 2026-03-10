@@ -57,7 +57,9 @@ class RideServiceTest {
 
     @Test
     void startRide_UserHasZeroBalance_ThrowsException() {
-        User poorUser = User.builder().id(2L).balance(BigDecimal.ZERO).build();
+        User poorUser = User.builder().id(2L).location(Location.builder().latitude(32.0).longitude(34.0).build())
+                .balance(BigDecimal.ZERO).build();
+
 
         when(rideRepository.findByUser_IdAndEndTimeIsNull(2L)).thenReturn(Optional.empty());
         when(userService.getUserById(2L)).thenReturn(poorUser);
