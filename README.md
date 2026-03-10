@@ -124,6 +124,21 @@ npm run dev
 ```
 The development server will run at http://localhost:5173.
 
+## Testing
+
+The backend includes unit tests to verify the core business logic and edge cases. The tests are written using **JUnit 5** and **Mockito**.
+
+Key areas covered:
+* Geographical distance calculations (Haversine formula).
+* Car availability and closest car selection logic.
+* Ride lifecycle management, including balance verification and cost calculation.
+
+To run the tests locally, navigate to the `backend` directory and execute the Maven wrapper:
+```bash
+cd backend
+./mvnw test
+```
+
 ## Notes
 * **Initial Balance:** New users start with a $0 balance. Funds must be added via the Profile page before starting a ride.
 * **Database Seeding:** The application automatically seeds 3 cars in the Tel Aviv area on the first run using a Flyway migration.
